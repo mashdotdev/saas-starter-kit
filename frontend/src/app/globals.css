@@ -1,22 +1,18 @@
 @import "tailwindcss";
 
-:root {
-  --background: #fafafa;
-  --foreground: #0a0908;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-display);
+  --font-subheading: var(--font-subheading);
   --color-brand-orange: #ff5454;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: #000000;
+  color: #ffffff;
   font-family: Arial, Helvetica, sans-serif;
 }
 

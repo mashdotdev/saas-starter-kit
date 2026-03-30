@@ -11,6 +11,11 @@ const tanker = localFont({
   variable: "--font-display",
 });
 
+const firaSans = localFont({
+  src: "../../public/fonts/FiraSans-Regular.woff",
+  variable: "--font-subheading",
+});
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -34,11 +39,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${tanker.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${tanker.variable} ${firaSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <Headline />
-        {/* <Header /> */}
+        <Header />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>

@@ -112,61 +112,80 @@ const Scale = () => {
   const scaleRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
-  useGSAP(
-    () => {
-      if (!headingRef.current) return;
+  useGSAP(() => {
+    if (!headingRef.current) return;
 
-      const split = SplitText.create(headingRef.current, { type: "chars" });
+    const split = SplitText.create(headingRef.current, { type: "chars" });
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: scaleRef.current,
-          start: "top 80%",
+    // ScrollTrigger.create({
+    //   trigger: scaleRef.current,
+    //   start: "top 55%",
+    //   end: "bottom 55%",
+    //   markers: true,
+    //   onEnter: () =>
+    //     gsap.to("body", {
+    //       background: "#ffffff",
+    //       duration: 0.6,
+    //       ease: "power2.inOut",
+    //     }),
+    //   onLeave: () =>
+    //     gsap.to("body", {
+    //       background: "#000000",
+    //       duration: 0.6,
+    //       ease: "power2.inOut",
+    //     }),
+    //   onEnterBack: () =>
+    //     gsap.to("body", {
+    //       background: "#ffffff",
+    //       duration: 0.6,
+    //       ease: "power2.inOut",
+    //     }),
+    //   onLeaveBack: () =>
+    //     gsap.to("body", {
+    //       background: "#000000",
+    //       duration: 0.6,
+    //       ease: "power2.inOut",
+    //     }),
+    // });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: scaleRef.current,
+        start: "top 55%",
+      },
+    });
+
+    tl.from(split.chars, {
+      opacity: 0,
+      yPercent: 80,
+      duration: 0.6,
+      ease: "power3.out",
+      stagger: 0.015,
+    })
+      .from(
+        ".scale-sub",
+        { opacity: 0, y: 16, duration: 0.5, ease: "power2.out" },
+        "-=0.3",
+      )
+      .to(
+        ".scale-box",
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: "power2.out",
+          stagger: 0.08,
         },
-      });
+        "-=0.2",
+      );
 
-      tl.from(split.chars, {
-        opacity: 0,
-        yPercent: 80,
-        duration: 0.6,
-        ease: "power3.out",
-        stagger: 0.015,
-      })
-        .from(
-          ".scale-sub",
-          { opacity: 0, y: 16, duration: 0.5, ease: "power2.out" },
-          "-=0.3",
-        )
-        .to(
-          ".scale-box",
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            ease: "power2.out",
-            stagger: 0.08,
-          },
-          "-=0.2",
-        );
-
-      return () => split.revert();
-    },
-    { scope: scaleRef },
-  );
+    return () => split.revert();
+  }, {});
 
   return (
-    <section ref={scaleRef} className="relative px-6 md:px-8">
+    <section ref={scaleRef} className="relative px-6 md:px-8 ">
       {/* Blueprint grid background */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-30"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, #e5e7eb 1px, transparent 1px),
-            linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)
-          `,
-          backgroundSize: "40px 40px",
-        }}
-      />
+      <div className="absolute inset-0 pointer-events-none opacity-30" />
 
       <div className="relative z-10 container mx-auto pt-24 pb-24">
         {/* Section header */}
@@ -207,7 +226,6 @@ const Scale = () => {
                   background: `radial-gradient(ellipse at 0% 0%, ${glow} 0%, transparent 55%),
                                radial-gradient(ellipse at 100% 100%, ${glow} 0%, transparent 55%),
                                linear-gradient(140deg, #0f0e17 0%, #12111c 100%)`,
-                  boxShadow: `0 0 0 1px rgba(255,255,255,0.06), 0 20px 60px -20px ${glow}`,
                 }}
               >
                 {/* SVG art layer */}
@@ -236,7 +254,7 @@ const Scale = () => {
                 {/* Content */}
                 <div className="relative z-10 mt-auto space-y-3">
                   <div className="flex items-end justify-between gap-4">
-                    <h3 className="text-2xl md:text-3xl font-heading text-white leading-tight uppercase tracking-tight">
+                    <h3 className="text-2xl md:text-3xl font-subheading text-white leading-tight uppercase tracking-tighter">
                       {heading}
                     </h3>
                     <span

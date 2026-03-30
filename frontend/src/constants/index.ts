@@ -43,4 +43,26 @@ export const scaleBox = [
     symbol: "⬢",
     art: "wave",
   },
+  {
+    tag: "05 — DATA",
+    heading: "Type-Safe DB",
+    description:
+      "Prisma ORM, type-safe queries, migrations, and Redis caching pre-configured. Scale from day one.",
+    gridClassName: "md:col-span-3",
+    accent: "#e879f9",
+    glow: "rgba(232,121,249,0.3)",
+    symbol: "⬢",
+    art: "wave",
+  },
+  {
+    tag: "06 — DATA",
+    heading: "Instant Deploy",
+    description:
+      "Pre-configured Github Actions for CI/CD. One click deploy to Vercel.",
+    gridClassName: "",
+    accent: "#ff5454",
+    glow: "rgba(232,121,249,0.3)",
+    symbol: "⬢",
+    art: "grid",
+  },
 ];
