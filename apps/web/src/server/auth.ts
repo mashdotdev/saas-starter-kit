@@ -18,7 +18,7 @@ export const auth = betterAuth({
     requireEmailVerification: true,
     sendResetPassword: async ({ user, url }) => {
       await getResend().emails.send({
-        from: "noreply@updates.yourdomain.com",
+        from: process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev",
         to: user.email,
         subject: "Reset your password",
         html: `<p>Click <a href="${url}">here</a> to reset your password.</p>`,
@@ -28,7 +28,7 @@ export const auth = betterAuth({
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
       await getResend().emails.send({
-        from: "noreply@updates.yourdomain.com",
+        from: process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev",
         to: user.email,
         subject: "Verify your email",
         html: `<p>Click <a href="${url}">here</a> to verify your email address.</p>`,
