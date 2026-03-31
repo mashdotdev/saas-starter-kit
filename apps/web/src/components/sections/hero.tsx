@@ -24,7 +24,7 @@ const techItems: TechItem[] = [
   { label: "STRIPE", symbol: "$" },
   { label: "SUPABASE", symbol: "⚡" },
   { label: "OPENAI", symbol: "◉", highlight: true },
-  { label: "NODEMAILER", symbol: "✉" },
+  { label: "RESEND", symbol: "✉" },
   { label: "BETTER AUTH", symbol: "⬡" },
   { label: "REDIS", symbol: "▲" },
   { label: "POSTGRES", symbol: "⬢" },
