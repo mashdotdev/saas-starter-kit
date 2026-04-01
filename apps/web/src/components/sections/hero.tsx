@@ -5,8 +5,7 @@ import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import CustomButton from "../custom-button";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import Headline from "../headline";
+import Marquee from "../marquee";
 
 gsap.registerPlugin(SplitText);
 
@@ -33,8 +32,7 @@ const techItems: TechItem[] = [
 ];
 
 // Two copies for seamless loop — animation goes 0 → -50%
-const row1 = [...techItems, ...techItems];
-const row2 = [...techItems, ...techItems].reverse();
+const row1 = [...techItems, ...techItems, ...techItems, ...techItems];
 
 const avatars = [
   { initials: "EK", bg: "#0a0908" },
@@ -96,33 +94,22 @@ const Hero = () => {
   );
 
   return (
-    <section
-      ref={heroRef}
-      className="relative px-4 h-screen md:px-8 overflow-hidden"
-      style={{
-        background:
-          "radial-gradient(125% 125% at 50% 90%, #000000 40%, #0d1a36 100%)",
-      }}
-    >
-      {/* ── Top: 2-col text area ── */}
-      <div className="relative z-10 pt-16">
-        <div className="flex justify-between flex-col lg:flex-row gap-6 items-center ">
-          {/* Left: Headline */}
-          <div className="overflow-hidden">
+    <section ref={heroRef} className="overflow-hidden">
+      <div className="container mx-auto px-4 md:px-0 overflow-hidden pt-12 md:pt-40 ">
+        <div className="gap-12 flex flex-col md:flex-row justify-between">
+          {/* Text div */}
+          <div>
             <h1
               ref={headlineRef}
               className="font-heading text-5xl md:text-6xl xl:text-7xl tracking-tight leading-[0.92] text-foreground uppercase"
             >
               Ship your AI SaaS in{" "}
-              <span className="text-brand-orange">Days</span>,{" "}
-              <br className="hidden lg:block" />
+              <span className="text-brand-orange">Days</span>
+              , <br className="hidden lg:block" />
               not months
             </h1>
-          </div>
 
-          {/* Right: Description + CTA + social proof */}
-          <div className="flex flex-col justify-end gap-6">
-            <p className="text-base md:text-lg text-foreground/60 max-w-xl leading-relaxed">
+            <p className="text-base md:text-lg text-zinc-400 max-w-xl leading-relaxed mt-4">
               The ultimate boilerplate for serious engineers.{" "}
               <span className="font-semibold text-foreground">
                 Auth, billing, agents, and database
@@ -130,13 +117,12 @@ const Hero = () => {
               production-ready from day one.
             </p>
 
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 mt-6">
               <CustomButton variant="white" text="Get the Kit" />
               <CustomButton variant="orange" text="Star on Github" />
             </div>
 
-            {/* Social proof */}
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex items-center gap-3 mt-12">
               <div className="flex -space-x-3">
                 {avatars.map(({ initials, bg }) => (
                   <div
@@ -155,65 +141,21 @@ const Hero = () => {
               </p>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* ── Gradient marquee section ── */}
-      <div
-        ref={gradientRef}
-        className="relative w-full py-12 md:py-16 mt-16 rounded-lg"
-      >
-        <video
-          src="/videos/home-engine.webm"
-          autoPlay
-          loop
-          muted
-          className="object-cover h-96 absolute left-2/4 -translate-x-2/4 transform -top-36 parallax-video"
-        />
-        {/* Row 1 — scrolls left */}
-        <div className="overflow-hidden mb-4 mt-48">
-          <div
-            className="flex gap-4 w-max"
-            style={{ animation: "marquee-left 30s linear infinite" }}
-          >
-            {row1.map(({ label, symbol }, i) => (
-              <div
-                key={`r1-${label}-${i}`}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 border border-white/40 backdrop-blur-sm whitespace-nowrap"
-              >
-                <span className="text-white/80 text-sm leading-none">
-                  {symbol}
-                </span>
-                <span className="font-mono text-xs font-bold tracking-widest text-white uppercase">
-                  {label}
-                </span>
-              </div>
-            ))}
+          {/* Video Div */}
+          <div>
+            <video
+              src="/videos/home-engine.webm"
+              autoPlay
+              loop
+              muted
+              className="object-cover h-96"
+            />
           </div>
         </div>
-
-        {/* Row 2 — scrolls right */}
-        <div className="overflow-hidden">
-          <div
-            className="flex gap-4 w-max"
-            style={{ animation: "marquee-right 28s linear infinite" }}
-          >
-            {row2.map(({ label, symbol }, i) => (
-              <div
-                key={`r2-${label}-${i}`}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-black/10 border border-white/30 backdrop-blur-sm whitespace-nowrap"
-              >
-                <span className="text-white/70 text-sm leading-none">
-                  {symbol}
-                </span>
-                <span className="font-mono text-xs font-bold tracking-widest text-white uppercase">
-                  {label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <div className="overflow-hidden mb-4 mt-48"></div>
       </div>
+      <Marquee row={row1} />
     </section>
   );
 };

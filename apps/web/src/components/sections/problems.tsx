@@ -30,17 +30,17 @@ const Problems = () => {
   });
 
   return (
-    <section className="h-screen pt-12" ref={problemRef}>
-      <div className="flex px-4 md:px-8 justify-between flex-col lg:flex-row gap-6 items-center border-t border-b border-white/20 py-12">
+    <section className="h-screen pt-12 container mx-auto" ref={problemRef}>
+      <div className="flex px-4 md:px-0 justify-between flex-col lg:flex-row gap-6 items-center">
         <div className="overflow-hidden">
-          <h3 className="font-subheading tracking-tighter text-5xl md:text-6xl xl:text-7xl leading-[0.92] text-foreground uppercase">
+          <h3 className="font-heading tracking-tighter text-5xl md:text-6xl xl:text-7xl leading-[0.92] text-foreground uppercase mb-12">
             The <span className="text-brand-orange">high</span> cost of <br />{" "}
             building from scratch
           </h3>
         </div>
 
         <div className="flex flex-col justify-end gap-6">
-          <p className="text-base md:text-lg text-foreground/60 max-w-xl leading-relaxed">
+          <p className="text-base md:text-lg text-zinc-400 max-w-xl  leading-relaxed">
             The engineering shouldn&apos;t be about reinventing the wheel. Most
             startup die in{" "}
             <span className="font-semibold text-foreground">
@@ -52,10 +52,10 @@ const Problems = () => {
       </div>
 
       <div className="relative size-full">
-        <div className="size-full px-4 md:px-8 py-4 md:py-8">
+        <div className="size-full px-4 md:px-0 py-4 md:py-8">
           <div className="flex justify-between">
             <div className="flex-1">
-              <span className="mb-2">01</span>
+              <span className="mb-2 text-zinc-400">01</span>
               <h2 className="font-subheading text-6xl tracking-tighter">
                 Time Waste
               </h2>
@@ -77,10 +77,10 @@ const Problems = () => {
             <div className="flex-1">hello</div>
           </div>
         </div>
-        <div className="bg-black absolute inset-0 top-[70%] size-full second-box border-t border-white/20 px-4 md:px-8 py-4 md:py-8">
+        <div className="backdrop-blur-3xl absolute inset-0 top-[70%] size-full second-box  px-4 md:px-0 py-4 md:py-8">
           <div className="flex justify-between">
             <div className="flex-1">
-              <span className="mb-2">02</span>
+              <span className="mb-2 text-zinc-400">02</span>
               <h2 className="font-subheading text-6xl tracking-tighter">
                 Auth Headaches
               </h2>
@@ -102,10 +102,10 @@ const Problems = () => {
             <div className="flex-1">hello</div>
           </div>
         </div>
-        <div className="bg-black absolute inset-0 top-full size-full third-box border-t border-white/20 px-4 md:px-8 py-4 md:py-8">
+        <div className="bg-black absolute inset-0 top-full size-full third-box px-4 md:px-0 py-4 md:py-8">
           <div className="flex justify-between">
             <div className="flex-1">
-              <span className="mb-2">03</span>
+              <span className="mb-2 text-zinc-400">03</span>
               <h2 className="font-subheading text-6xl tracking-tighter">
                 Billing Complexity
               </h2>

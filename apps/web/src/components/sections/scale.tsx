@@ -117,42 +117,11 @@ const Scale = () => {
 
     const split = SplitText.create(headingRef.current, { type: "chars" });
 
-    // ScrollTrigger.create({
-    //   trigger: scaleRef.current,
-    //   start: "top 55%",
-    //   end: "bottom 55%",
-    //   markers: true,
-    //   onEnter: () =>
-    //     gsap.to("body", {
-    //       background: "#ffffff",
-    //       duration: 0.6,
-    //       ease: "power2.inOut",
-    //     }),
-    //   onLeave: () =>
-    //     gsap.to("body", {
-    //       background: "#000000",
-    //       duration: 0.6,
-    //       ease: "power2.inOut",
-    //     }),
-    //   onEnterBack: () =>
-    //     gsap.to("body", {
-    //       background: "#ffffff",
-    //       duration: 0.6,
-    //       ease: "power2.inOut",
-    //     }),
-    //   onLeaveBack: () =>
-    //     gsap.to("body", {
-    //       background: "#000000",
-    //       duration: 0.6,
-    //       ease: "power2.inOut",
-    //     }),
-    // });
-
     const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: scaleRef.current,
-        start: "top 55%",
-      },
+      // scrollTrigger: {
+      //   trigger: scaleRef.current,
+      //   start: "top 55%",
+      // },
     });
 
     tl.from(split.chars, {
@@ -183,10 +152,7 @@ const Scale = () => {
   }, {});
 
   return (
-    <section ref={scaleRef} className="relative px-6 md:px-8 ">
-      {/* Blueprint grid background */}
-      <div className="absolute inset-0 pointer-events-none opacity-30" />
-
+    <section ref={scaleRef} className="relative px-6 md:px-0 ">
       <div className="relative z-10 container mx-auto pt-24 pb-24">
         {/* Section header */}
         <div className="overflow-hidden mb-2">
@@ -195,10 +161,10 @@ const Scale = () => {
             className="text-center text-5xl md:text-7xl font-heading uppercase tracking-tight leading-[0.92]"
           >
             Everything you need to{" "}
-            <span className="text-brand-orange italic">scale</span>
+            <span className="text-brand-orange">scale</span>
           </h1>
         </div>
-        <p className="scale-sub text-center text-base md:text-lg text-foreground/50 mt-4 max-w-xl mx-auto">
+        <p className="scale-sub text-center text-base md:text-lg text-zinc-400 mt-4 max-w-xl mx-auto">
           Skip tedious setup. Jump straight into your business logic with
           pre-wired, production-grade modules.
         </p>
