@@ -3,6 +3,7 @@ import { cache } from "react";
 import { headers } from "next/headers";
 import { auth } from "@/server/auth";
 import { prisma } from "@/server/db";
+import { getActiveOrgId } from "@/lib/active-org";
 
 export const createTRPCContext = cache(async () => {
   const h = await headers();
@@ -22,4 +23,27 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return next({ ctx: { ...ctx, session: ctx.session } });
+});
+
+export const orgProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  const activeOrgId = await getActiveOrgId();
+  const membership = await ctx.prisma.membership.findFirst({
+    where: {
+      userId: ctx.session.user.id,
+      ...(activeOrgId ? { orgId: activeOrgId } : {}),
+    },
+    include: { org: true },
+    orderBy: { joinedAt: "asc" },
+  });
+  if (!membership) {
+    throw new TRPCError({ code: "FORBIDDEN", message: "No org membership found" });
+  }
+  return next({ ctx: { ...ctx, org: membership.org, membership } });
+});
+
+export const adminProcedure = orgProcedure.use(({ ctx, next }) => {
+  if (ctx.membership.role !== "admin") {
+    throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
+  }
+  return next({ ctx });
 });

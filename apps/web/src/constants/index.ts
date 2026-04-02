@@ -66,3 +66,16 @@ export const scaleBox = [
     art: "grid",
   },
 ];
+
+export const pricingFeatures = {
+  openSource: ["Next.js 16", "Better Auth", "prisma Schema", "Supabase"],
+  pro: [
+    "Everything In Community",
+    "Complete payment integration ( Lemon Squeezy )",
+    "AI Agent Logic & Tools ( OpenAI Agents SDK )",
+    "Upstash Redis",
+    "Vector DB & RAG ( Qdrant & LangChain )",
+    "Multi-tenant & RBAC",
+    "Private Discord Community",
+  ],
+};

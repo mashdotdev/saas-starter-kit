@@ -29,6 +29,21 @@ model Org {
   createdAt      DateTime     @default(now())
   memberships    Membership[]
   aiUsage        AiUsage[]
+  invites        OrgInvite[]
+}
+
+model OrgInvite {
+  id        String     @id @default(cuid())
+  orgId     String
+  email     String
+  role      MemberRole @default(member)
+  token     String     @unique @default(cuid())
+  invitedBy String
+  expiresAt DateTime
+  createdAt DateTime   @default(now())
+  org       Org        @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, email])
 }
 
 model Membership {
