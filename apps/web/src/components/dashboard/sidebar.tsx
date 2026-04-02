@@ -1,23 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import OrgSwitcher from "@/components/dashboard/org-switcher";
 
 const navItems = [
   { href: "/dashboard", label: "Overview" },
   { href: "/dashboard/ai", label: "AI Chat" },
   { href: "/dashboard/billing", label: "Billing" },
+  { href: "/dashboard/settings/members", label: "Members" },
   { href: "/dashboard/settings", label: "Settings" },
 ];
 
 interface SidebarProps {
   user: { name: string; email: string; image?: string | null };
+  orgs: { id: string; name: string }[];
+  activeOrgId: string | null;
 }
 
-export default function Sidebar({ user }: SidebarProps) {
+export default function Sidebar({ user, orgs, activeOrgId }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -34,6 +37,16 @@ export default function Sidebar({ user }: SidebarProps) {
           SaaS Kit
         </span>
       </div>
+
+      {/* Org switcher */}
+      {orgs.length > 0 && (
+        <div className="px-3 pt-3 pb-2 border-b border-white/5">
+          <p className="text-[10px] text-white/30 uppercase tracking-widest px-3 mb-1">
+            Organization
+          </p>
+          <OrgSwitcher orgs={orgs} activeOrgId={activeOrgId} />
+        </div>
+      )}
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-1">
