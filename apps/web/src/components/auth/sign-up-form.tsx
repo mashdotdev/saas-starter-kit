@@ -5,13 +5,21 @@ import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
-export default function SignUpForm() {
+interface Props {
+  nextUrl?: string;
+}
+
+export default function SignUpForm({ nextUrl }: Props) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const verifyRedirect = nextUrl
+    ? `/verify-email?next=${encodeURIComponent(nextUrl)}`
+    : "/verify-email";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,12 +30,12 @@ export default function SignUpForm() {
         name,
         email,
         password,
-        callbackURL: "/verify-email",
+        callbackURL: verifyRedirect,
       });
       if (res.error) {
         setError(res.error.message ?? "Sign up failed");
       } else {
-        router.push("/verify-email");
+        router.push(verifyRedirect);
       }
     } catch {
       setError("An unexpected error occurred");
@@ -39,7 +47,7 @@ export default function SignUpForm() {
   async function handleOAuth(provider: "google" | "github") {
     await authClient.signIn.social({
       provider,
-      callbackURL: "/dashboard",
+      callbackURL: nextUrl ?? "/dashboard",
     });
   }
 

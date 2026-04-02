@@ -1,7 +1,13 @@
 import SignUpForm from "@/components/auth/sign-up-form";
 import Link from "next/link";
 
-export default function SignUpPage() {
+interface Props {
+  searchParams: Promise<{ next?: string }>;
+}
+
+export default async function SignUpPage({ searchParams }: Props) {
+  const { next } = await searchParams;
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-black px-4">
       <div className="w-full max-w-sm space-y-6">
@@ -13,10 +19,13 @@ export default function SignUpPage() {
             Start shipping your AI SaaS today
           </p>
         </div>
-        <SignUpForm />
+        <SignUpForm nextUrl={next} />
         <p className="text-center text-sm text-white/50">
           Already have an account?{" "}
-          <Link href="/sign-in" className="text-white underline underline-offset-4">
+          <Link
+            href={next ? `/sign-in?next=${encodeURIComponent(next)}` : "/sign-in"}
+            className="text-white underline underline-offset-4"
+          >
             Sign in
           </Link>
         </p>

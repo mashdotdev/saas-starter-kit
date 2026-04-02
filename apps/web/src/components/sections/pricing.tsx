@@ -2,7 +2,7 @@ import PricingCard from "../pricing-card";
 
 const Pricing = () => {
   return (
-    <section className="py-24 container mx-auto px-4 md:px-0">
+    <section className="py-24 container mx-auto px-4 md:px-0" id="pricing">
       <h1 className="text-center text-5xl md:text-7xl font-heading uppercase tracking-tight leading-[0.92]">
         Choose your velocity
       </h1>

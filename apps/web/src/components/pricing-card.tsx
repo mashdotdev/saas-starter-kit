@@ -20,7 +20,7 @@ const PricingCard = ({ variant }: PricingCardProps) => {
   return (
     <div
       className={clsx(
-        isOpenSource ? "border border-white/50" : "bg-white text-black",
+        isOpenSource ? "bg-white text-black" : "bg-brand-orange text-white",
         "p-6 min-h-96 flex flex-col rounded-lg overflow-hidden",
       )}
     >
@@ -36,7 +36,12 @@ const PricingCard = ({ variant }: PricingCardProps) => {
         </span>
       </div>
 
-      <ul className="mt-8 mb-16 list-disc pl-6 text-zinc-400 space-y-3">
+      <ul
+        className={clsx(
+          isOpenSource ? "text-zinc-400" : "text-white",
+          "mt-8 mb-16 list-disc pl-6 space-y-3",
+        )}
+      >
         {isOpenSource
           ? pricingFeatures.openSource.map((feature) => (
               <li key={feature}>{feature}</li>
@@ -48,7 +53,7 @@ const PricingCard = ({ variant }: PricingCardProps) => {
 
       <button
         className={clsx(
-          isOpenSource ? "" : "bg-black text-white",
+          isOpenSource ? "bg-black text-white" : "bg-black text-white",
           "w-full mt-auto border p-4 cursor-pointer",
         )}
         onClick={handleButtonFunction}

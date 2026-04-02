@@ -1,14 +1,20 @@
 import { headers } from "next/headers";
 import { auth } from "@/server/auth";
 import { prisma } from "@/server/db";
+import { getActiveOrgId } from "@/lib/active-org";
 import BillingClient from "./billing-client";
 
 export default async function BillingPage() {
   const session = await auth.api.getSession({ headers: await headers() });
+  const activeOrgId = await getActiveOrgId();
 
   const membership = await prisma.membership.findFirst({
-    where: { userId: session!.user.id },
+    where: {
+      userId: session!.user.id,
+      ...(activeOrgId ? { orgId: activeOrgId } : {}),
+    },
     include: { org: true },
+    orderBy: { joinedAt: "asc" },
   });
 
   return (

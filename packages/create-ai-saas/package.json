@@ -1,0 +1,35 @@
+{
+  "name": "create-ai-saas",
+  "version": "1.0.0",
+  "description": "Scaffold a production-ready AI SaaS app in seconds",
+  "bin": {
+    "create-ai-saas": "./index.mjs"
+  },
+  "type": "module",
+  "files": [
+    "index.mjs"
+  ],
+  "dependencies": {
+    "@clack/prompts": "^0.9.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "saas",
+    "ai",
+    "nextjs",
+    "starter",
+    "boilerplate",
+    "create"
+  ],
+  "author": "Mashhood Hussain <mashhoodhussain@gmail.com> (https://github.com/mashdotdev)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mashdotdev/saas-starter-kit.git"
+  }
+}

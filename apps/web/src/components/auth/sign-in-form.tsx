@@ -5,12 +5,18 @@ import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
-export default function SignInForm() {
+interface Props {
+  nextUrl?: string;
+}
+
+export default function SignInForm({ nextUrl }: Props) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const destination = nextUrl ?? "/dashboard";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -20,12 +26,12 @@ export default function SignInForm() {
       const res = await authClient.signIn.email({
         email,
         password,
-        callbackURL: "/dashboard",
+        callbackURL: destination,
       });
       if (res.error) {
         setError(res.error.message ?? "Sign in failed");
       } else {
-        router.push("/dashboard");
+        router.push(destination);
       }
     } catch {
       setError("An unexpected error occurred");
@@ -37,7 +43,7 @@ export default function SignInForm() {
   async function handleOAuth(provider: "google" | "github") {
     await authClient.signIn.social({
       provider,
-      callbackURL: "/dashboard",
+      callbackURL: destination,
     });
   }
 

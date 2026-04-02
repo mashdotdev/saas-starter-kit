@@ -1,6 +1,8 @@
 import { headers } from "next/headers";
 import { auth } from "@/server/auth";
+import { prisma } from "@/server/db";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { getActiveOrgId } from "@/lib/active-org";
 
 export const maxDuration = 60;
 
@@ -23,10 +25,20 @@ export async function POST(req: Request) {
     );
   }
 
-  // 3 — Parse body
+  // 3 — Resolve active org
+  const activeOrgId = await getActiveOrgId();
+  const membership = await prisma.membership.findFirst({
+    where: {
+      userId: session.user.id,
+      ...(activeOrgId ? { orgId: activeOrgId } : {}),
+    },
+    orderBy: { joinedAt: "asc" },
+  });
+
+  // 4 — Parse body
   const body = await req.json();
 
-  // 4 — Forward to FastAPI and stream back
+  // 5 — Forward to FastAPI and stream back
   const aiServiceUrl = process.env.AI_SERVICE_URL ?? "http://localhost:8000";
   const internalSecret = process.env.AI_SERVICE_INTERNAL_SECRET ?? "";
 
@@ -49,7 +61,7 @@ export async function POST(req: Request) {
         }),
       ),
       userId: session.user.id,
-      orgId: "",
+      orgId: membership?.orgId ?? "",
     }),
   });
 

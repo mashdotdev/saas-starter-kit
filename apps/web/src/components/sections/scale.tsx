@@ -152,7 +152,7 @@ const Scale = () => {
   }, {});
 
   return (
-    <section ref={scaleRef} className="relative px-6 md:px-0 ">
+    <section ref={scaleRef} className="relative px-6 md:px-0 " id="features">
       <div className="relative z-10 container mx-auto pt-24 pb-24">
         {/* Section header */}
         <div className="overflow-hidden mb-2">
