@@ -79,3 +79,17 @@ export const pricingFeatures = {
     "Private Discord Community",
   ],
 };
+
+export const footerLinks = {
+  company: [
+    { label: "About Me", href: "#" },
+    {
+      label: "Upwork",
+      href: "https://www.upwork.com/freelancers/~016315b7449c2e0802?mp_source=share",
+    },
+    {
+      label: "Contact",
+      href: "https://www.upwork.com/freelancers/~016315b7449c2e0802?mp_source=share",
+    },
+  ],
+};

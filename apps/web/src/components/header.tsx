@@ -6,7 +6,6 @@ import { useState } from "react";
 const navLinks = [
   { label: "Features", href: "#features" },
   { label: "Architecture", href: "#architecture" },
-  { label: "Pricing", href: "#pricing" },
   {
     label: "Github",
     href: "https://github.com/mashdotdev/saas-starter-kit.git",
@@ -39,11 +38,16 @@ const Header = () => {
         {/* Right — desktop CTAs + mobile hamburger */}
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-6">
-            <Link href={""} className="text-sm text-zinc-400 hover:text-white transition-colors">
+            <Link
+              href={
+                "https://www.upwork.com/freelancers/~016315b7449c2e0802?mp_source=share"
+              }
+              className="text-sm text-zinc-400 hover:text-white transition-colors"
+            >
               Hire Me
             </Link>
             <Link
-              href={""}
+              href={"https://github.com/mashdotdev/saas-starter-kit.git"}
               className="bg-white text-black text-sm py-2 px-4 rounded-lg hover:bg-zinc-100 transition-colors"
             >
               Get the Kit
@@ -86,14 +90,16 @@ const Header = () => {
           </nav>
           <div className="flex flex-col gap-3 pt-4 border-t border-white/10">
             <Link
-              href={""}
+              href={
+                "https://www.upwork.com/freelancers/~016315b7449c2e0802?mp_source=share"
+              }
               className="text-base text-zinc-300 hover:text-white transition-colors"
               onClick={() => setOpen(false)}
             >
               Hire Me
             </Link>
             <Link
-              href={""}
+              href={"https://github.com/mashdotdev/saas-starter-kit.git"}
               className="bg-white text-black text-sm py-2.5 px-4 rounded-lg text-center hover:bg-zinc-100 transition-colors"
               onClick={() => setOpen(false)}
             >

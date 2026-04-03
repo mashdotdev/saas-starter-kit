@@ -99,7 +99,7 @@ const Problems = () => {
       </div>
 
       {/* Problem rows */}
-      <div className="flex flex-col divide-y divide-white/5">
+      <div className="flex flex-col divide-y  divide-white/5">
         {problems.map(
           ({ num, heading, desc, image, painPoints, stat, statLabel }) => (
             <div
@@ -130,7 +130,7 @@ const Problems = () => {
               </div>
 
               {/* Right — pain points + stat */}
-              <div className="flex flex-col justify-between items-end gap-6">
+              <div className="flex flex-col justify-between md:items-end gap-6">
                 <ul className="flex flex-col gap-2.5">
                   {painPoints.map((point) => (
                     <li key={point} className="flex items-start gap-3">

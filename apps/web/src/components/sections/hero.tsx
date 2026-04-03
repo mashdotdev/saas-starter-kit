@@ -141,7 +141,6 @@ const Hero = () => {
               </p>
             </div>
           </div>
-
           {/* Video Div */}
           <div>
             <video
@@ -149,7 +148,7 @@ const Hero = () => {
               autoPlay
               loop
               muted
-              className="object-cover h-96"
+              className="object-cover md:h-64 lg:h-96"
             />
           </div>
         </div>

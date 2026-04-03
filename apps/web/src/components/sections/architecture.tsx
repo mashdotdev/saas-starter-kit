@@ -22,7 +22,7 @@ const layers: ArchLayer[] = [
     accent: "#6366f1",
     glow: "rgba(99,102,241,0.14)",
     nodes: [
-      { name: "Next.js 15", symbol: "⌘", desc: "App Router · RSC · Streaming" },
+      { name: "Next.js 16", symbol: "⌘", desc: "App Router · RSC · Streaming" },
       { name: "Tailwind CSS v4", symbol: "✦", desc: "Utility-first styling" },
       { name: "tRPC Client", symbol: "⧖", desc: "Type-safe hooks" },
       { name: "GSAP", symbol: "◎", desc: "Motion & scroll animations" },
@@ -34,9 +34,17 @@ const layers: ArchLayer[] = [
     glow: "rgba(16,185,129,0.12)",
     nodes: [
       { name: "tRPC Server", symbol: "⧖", desc: "RBAC · Org context" },
-      { name: "Better Auth", symbol: "⬡", desc: "OAuth · Magic links · Sessions" },
+      {
+        name: "Better Auth",
+        symbol: "⬡",
+        desc: "OAuth · Magic links · Sessions",
+      },
       { name: "FastAPI", symbol: "⚡", desc: "Python AI microservice" },
-      { name: "Stripe Webhooks", symbol: "$", desc: "Subscriptions · Billing events" },
+      {
+        name: "Lemon Squeezy",
+        symbol: "$",
+        desc: "Subscriptions · Billing events",
+      },
       { name: "Resend", symbol: "✉", desc: "Transactional email" },
     ],
   },
@@ -115,7 +123,11 @@ const Architecture = () => {
   );
 
   return (
-    <section ref={archRef} className="relative pt-24 pb-24 px-4 md:px-0" id="architecture">
+    <section
+      ref={archRef}
+      className="relative pt-24 pb-24 px-4 md:px-0"
+      id="architecture"
+    >
       <div className="container mx-auto">
         {/* Header */}
         <div className="overflow-hidden mb-2">

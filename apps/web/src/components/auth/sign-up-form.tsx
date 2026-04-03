@@ -52,7 +52,7 @@ export default function SignUpForm({ nextUrl }: Props) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 bg-white/5 p-4 rounded-lg">
       <form onSubmit={handleSubmit} className="space-y-3">
         <div>
           <label className="block text-xs text-white/60 mb-1 uppercase tracking-wider">
@@ -126,7 +126,9 @@ export default function SignUpForm({ nextUrl }: Props) {
 
       <div className="relative flex items-center gap-3">
         <div className="flex-1 h-px bg-white/10" />
-        <span className="text-xs text-white/30 uppercase tracking-wider">or</span>
+        <span className="text-xs text-white/30 uppercase tracking-wider">
+          or
+        </span>
         <div className="flex-1 h-px bg-white/10" />
       </div>
 

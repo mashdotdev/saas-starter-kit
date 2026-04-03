@@ -20,12 +20,13 @@ export default async function DashboardLayout({
   });
 
   const activeOrgId = await getActiveOrgId();
+  type Membership = (typeof memberships)[number];
   const activeOrg =
-    memberships.find((m) => m.orgId === activeOrgId)?.org ??
+    memberships.find((m: Membership) => m.orgId === activeOrgId)?.org ??
     memberships[0]?.org ??
     null;
 
-  const orgs = memberships.map((m) => ({ id: m.orgId, name: m.org.name }));
+  const orgs = memberships.map((m: Membership) => ({ id: m.orgId, name: m.org.name }));
 
   return (
     <div className="min-h-screen bg-black flex">
