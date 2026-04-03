@@ -44,14 +44,14 @@ export default async function MembersPage() {
         orgId={membership.orgId}
         currentUserId={session.user.id}
         currentUserRole={membership.role}
-        members={members.map((m) => ({
+        members={members.map((m: (typeof members)[number]) => ({
           id: m.id,
           userId: m.userId,
           role: m.role,
           joinedAt: m.joinedAt.toISOString(),
           user: m.user,
         }))}
-        pendingInvites={pendingInvites.map((i) => ({
+        pendingInvites={pendingInvites.map((i: (typeof pendingInvites)[number]) => ({
           id: i.id,
           email: i.email,
           role: i.role,
