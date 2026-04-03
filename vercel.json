@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd apps/web && bun run build",
+  "buildCommand": "bunx prisma generate --schema=packages/db/prisma/schema.prisma && cd apps/web && bun run build",
   "outputDirectory": "apps/web/.next",
   "installCommand": "bun install",
   "framework": "nextjs"
