@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { Resend } from "resend";
 import { TRPCError } from "@trpc/server";
+import type { Prisma } from "@prisma/client";
 import {
   adminProcedure,
   orgProcedure,
@@ -46,7 +47,7 @@ export const orgRouter = router({
         });
       }
 
-      const org = await ctx.prisma.$transaction(async (tx) => {
+      const org = await ctx.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
         const newOrg = await tx.org.create({
           data: { name: input.name, slug: input.slug },
         });
