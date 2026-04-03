@@ -29,7 +29,7 @@ const PricingCard = ({ variant }: PricingCardProps) => {
       </h2>
       <div className="mt-2">
         <span className="text-6xl mt-2 font-heading">
-          {isOpenSource ? "$0" : "$249"}
+          {isOpenSource ? "$0" : "$69"}
         </span>
         <span className="ml-2 text-zinc-400">
           {isOpenSource ? "/forever" : "/one-time"}
