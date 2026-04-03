@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Resend } from "resend";
 import { TRPCError } from "@trpc/server";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@repo/db";
 import {
   adminProcedure,
   orgProcedure,
