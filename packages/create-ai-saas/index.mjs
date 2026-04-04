@@ -41,23 +41,6 @@ const answers = await p.group(
                 return "Only lowercase letters, numbers, hyphens and underscores";
             },
           }),
-
-    tier: () =>
-      p.select({
-        message: "Which tier?",
-        options: [
-          {
-            value: "free",
-            label: "Community (free)",
-            hint: "MIT licensed — full source code on GitHub",
-          },
-          {
-            value: "pro",
-            label: "Pro ($249 one-time)",
-            hint: "Multi-tenancy, RBAC, RAG, usage billing",
-          },
-        ],
-      }),
   },
   {
     onCancel: () => {
@@ -66,16 +49,6 @@ const answers = await p.group(
     },
   },
 );
-
-if (answers.tier === "pro") {
-  p.note(
-    `Purchase at: ${ORANGE}https://mashdotdev.gumroad.com/l/ai-saas-pro${RESET}\n` +
-      `After purchase you will receive access to the private pro branch.`,
-    "Pro tier",
-  );
-  p.outro("Come back after purchase to scaffold the Pro template!");
-  process.exit(0);
-}
 
 const projectName = answers.name;
 const projectPath = join(process.cwd(), projectName);
