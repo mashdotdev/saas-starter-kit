@@ -558,51 +558,190 @@ In `apps/web/src/components/dashboard/sidebar.tsx`, add an entry to the nav link
 
 ### Customising the RAG pipeline
 
-**Scope retrieval to a specific document**
+#### What document types are currently supported
 
-In `apps/ai-service/services/rag.py`, add a `must` filter to the Qdrant query so only chunks from a specific document are returned:
+The ingestion endpoint at `POST /rag/ingest` accepts two content types, controlled by the `isPdf` flag:
 
-```python
-from qdrant_client.models import Filter, FieldCondition, MatchValue
+| Type | `isPdf` | How it works |
+|---|---|---|
+| **Plain text** | `false` | Content string is chunked directly — works for `.txt`, `.md`, `.csv`, source code |
+| **PDF** | `true` | Content is a base64-encoded PDF — `pypdf` extracts text page by page, then chunks it |
 
-results = qdrant.search(
-    collection_name=f"org_{org_id}",
-    query_vector=embedding,
-    query_filter=Filter(
-        must=[FieldCondition(key="document_id", match=MatchValue(value=document_id))]
-    ),
-    limit=5,
-)
-```
+Everything else (Word docs, HTML, spreadsheets) must be converted to plain text before sending. Once you have a string the pipeline is format-agnostic.
 
-Store `document_id` in the Qdrant payload when ingesting:
+The ingestion request shape (`apps/ai-service/routers/rag.py`):
 
 ```python
-points = [PointStruct(
-    id=str(uuid4()),
-    vector=embedding,
-    payload={"text": chunk, "document_id": doc_id, "source": filename}
-) for chunk, embedding in zip(chunks, embeddings)]
+class IngestRequest(BaseModel):
+    orgId: str        # which org's Qdrant collection to write to
+    docId: str        # your stable ID for this document (used for deletion)
+    filename: str     # stored in metadata, surfaced in the dashboard doc list
+    content: str      # raw text OR base64-encoded PDF bytes
+    isPdf: bool = False
 ```
 
-**Change the chunk size**
-
-In `apps/ai-service/services/rag.py`:
+Each stored chunk carries this Qdrant payload:
 
 ```python
-splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1200,   # larger chunks = more context per result
-    chunk_overlap=150,
-)
+{ "doc_id": docId, "filename": filename, "org_id": orgId, "chunk_index": i }
 ```
 
-**Swap the embedding model**
+#### How to ingest documents from Next.js
 
-Replace `models/text-embedding-004` with any Google embedding model:
+Always proxy through your Next.js backend — never call the AI service directly from the browser so `AI_SERVICE_SECRET` stays server-side.
+
+**Plain text / Markdown / source code:**
+
+```ts
+// apps/web/src/server/trpc/routers/docs.ts
+ingest: adminProcedure
+  .input(z.object({ docId: z.string(), filename: z.string(), content: z.string() }))
+  .mutation(async ({ ctx, input }) => {
+    await fetch(`${process.env.AI_SERVICE_URL}/rag/ingest`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-secret": process.env.AI_SERVICE_SECRET!,
+      },
+      body: JSON.stringify({
+        orgId: ctx.org.id,
+        docId: input.docId,
+        filename: input.filename,
+        content: input.content,
+        isPdf: false,
+      }),
+    });
+  }),
+```
+
+**PDF upload:**
+
+```ts
+ingestPdf: adminProcedure
+  .input(z.object({ docId: z.string(), filename: z.string(), base64: z.string() }))
+  .mutation(async ({ ctx, input }) => {
+    await fetch(`${process.env.AI_SERVICE_URL}/rag/ingest`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-secret": process.env.AI_SERVICE_SECRET!,
+      },
+      body: JSON.stringify({
+        orgId: ctx.org.id,
+        docId: input.docId,
+        filename: input.filename,
+        content: input.base64,
+        isPdf: true,
+      }),
+    });
+  }),
+```
+
+On the client, convert a `File` to base64 before calling the mutation:
+
+```ts
+const toBase64 = (file: File): Promise<string> =>
+  new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.onload = () => res((reader.result as string).split(",")[1]);
+    reader.onerror = rej;
+    reader.readAsDataURL(file);
+  });
+
+const base64 = await toBase64(file);
+await ingestPdf.mutateAsync({ docId: crypto.randomUUID(), filename: file.name, base64 });
+```
+
+#### Adding support for new document types
+
+**Word documents (.docx)** — add `python-docx` to `apps/ai-service/requirements.txt`:
 
 ```python
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+elif is_docx:
+    import io
+    from docx import Document
+    doc = Document(io.BytesIO(base64.b64decode(content)))
+    content = "\n".join(p.text for p in doc.paragraphs if p.text.strip())
 ```
+
+**HTML / web pages** — add `beautifulsoup4`:
+
+```python
+elif is_html:
+    from bs4 import BeautifulSoup
+    content = BeautifulSoup(content, "html.parser").get_text(separator="\n", strip=True)
+```
+
+**CSV / spreadsheets** — convert rows to readable sentences so the embedder indexes meaning, not raw commas:
+
+```python
+elif is_csv:
+    import csv, io
+    reader = csv.DictReader(io.StringIO(content))
+    content = "\n".join(
+        ", ".join(f"{k}: {v}" for k, v in row.items()) for row in reader
+    )
+```
+
+**Code files** — plain text works fine. Pass `isPdf: false` with raw source. Optionally tag the language in metadata for filtered retrieval later:
+
+```python
+metadatas = [
+    { "doc_id": doc_id, "filename": filename, "org_id": org_id,
+      "chunk_index": i, "language": filename.rsplit(".", 1)[-1] }
+    for i in range(len(chunks))
+]
+```
+
+#### Scope retrieval to a single document
+
+The `retrieve` function currently searches the entire org collection. To scope it to one document, add an optional filter in `apps/ai-service/services/rag.py`:
+
+```python
+async def retrieve(org_id: str, query: str, k: int = 5, doc_id: str | None = None):
+    store = QdrantVectorStore(client=_get_client(), collection_name=_collection_name(org_id), embedding=_get_embeddings())
+
+    kwargs: dict = {"k": k}
+    if doc_id:
+        kwargs["filter"] = Filter(
+            must=[FieldCondition(key="doc_id", match=MatchValue(value=doc_id))]
+        )
+
+    results = await store.asimilarity_search_with_score(query, **kwargs)
+    return [{"content": doc.page_content, "metadata": doc.metadata, "score": float(score)} for doc, score in results]
+```
+
+Add `docId` as an optional field to `RetrieveRequest` and pass it through.
+
+#### Tuning chunk size and overlap
+
+The defaults in `apps/ai-service/services/rag.py`:
+
+```python
+CHUNK_SIZE = 800    # characters per chunk
+CHUNK_OVERLAP = 100 # overlap between adjacent chunks
+```
+
+| Use case | Recommended `CHUNK_SIZE` | Reason |
+|---|---|---|
+| Factual Q&A (FAQs, support docs) | 400–600 | Smaller = more precise hit |
+| Contracts / long reports | 1200–1600 | More context per result |
+| Source code | 1500+ | Avoid splitting mid-function |
+| Mixed content | 800 (default) | Good general balance |
+
+Overlap should be ~10–15% of chunk size to preserve sentence continuity across boundaries.
+
+#### Swap or upgrade the embedding model
+
+Change `EMBEDDING_MODEL` at the top of `apps/ai-service/services/rag.py`. If you change model you **must** delete and recreate the Qdrant collection because the vector dimension changes:
+
+| Model | `VECTOR_SIZE` | Notes |
+|---|---|---|
+| `models/text-embedding-004` | 768 | Current default — fast, accurate |
+| `models/gemini-embedding-exp-03-07` | 3072 | Highest quality, slower, higher cost |
+| `models/embedding-001` | 768 | Older fallback, still reliable |
+
+After changing the model, update `VECTOR_SIZE` to match and re-ingest all documents.
 
 ---
 
