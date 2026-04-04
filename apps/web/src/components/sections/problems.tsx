@@ -42,7 +42,7 @@ const problems = [
   {
     num: "03",
     heading: "Billing Complexity",
-    desc: "Stripe webhooks, subscription logic, tiered pricing, and tax compliance — it's harder than it looks.",
+    desc: "Webhooks, subscription logic, tiered pricing, it's harder than it looks.",
     image: "/images/2.png",
     painPoints: [
       "Webhook signature verification",
@@ -120,7 +120,7 @@ const Problems = () => {
               </div>
 
               {/* Centre — image */}
-              <div className="relative w-full h-64 md:h-auto min-h-[280px]">
+              <div className="relative w-full h-64 md:h-auto min-h-70">
                 <Image
                   src={image}
                   alt={heading}

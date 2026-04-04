@@ -3,7 +3,7 @@ export const scaleBox = [
     tag: "01 — AI",
     heading: "Production-ready AI Agents",
     description:
-      "Streaming LLM responses, tool calling, multi-step reasoning, and durable workflows — all wired up and ready to ship.",
+      "Streaming LLM responses, tool calling, multi-step reasoning, and durable workflows all wired up and ready to ship.",
     gridClassName: "md:col-span-3",
     accent: "#6366f1",
     glow: "rgba(99,102,241,0.35)",
@@ -23,7 +23,7 @@ export const scaleBox = [
   },
   {
     tag: "03 — BILLING",
-    heading: "Stripe billing, done",
+    heading: "billing, done",
     description:
       "Subscriptions, usage metering, customer portal, and webhooks handled end-to-end.",
     gridClassName: "",

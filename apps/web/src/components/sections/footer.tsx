@@ -48,7 +48,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <h1 className="text-[8vw] text-brand-orange mt-auto tracking-widest font-heading text-center bg-transparent">
+      <h1 className="text-[8vw] text-brand-orange mt-auto  font-heading text-center bg-transparent">
         SaaS Kit by mashdotdev
       </h1>
     </footer>
