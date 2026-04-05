@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Providers from "@/components/providers";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const tanker = localFont({
   src: "../../public/fonts/Tanker-Regular.woff",
@@ -40,6 +41,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${tanker.variable} ${firaSans.variable} h-full antialiased`}
     >
       <body>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
         <Providers>{children}</Providers>
       </body>
     </html>

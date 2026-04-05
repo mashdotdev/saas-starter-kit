@@ -13,6 +13,7 @@
     "@gsap/react": "^2.1.2",
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
     "@lottiefiles/dotlottie-react": "^0.18.7",
+    "@next/third-parties": "^16.2.2",
     "@prisma/client": "^6.5.0",
     "@repo/db": "workspace:*",
     "@repo/types": "workspace:*",

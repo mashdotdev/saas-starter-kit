@@ -118,27 +118,16 @@ const Hero = () => {
             </p>
 
             <div className="flex flex-wrap gap-4 mt-6">
-              <CustomButton variant="white" text="Get the Kit" />
-              <CustomButton variant="orange" text="Star on Github" />
-            </div>
-
-            <div className="flex items-center gap-3 mt-12">
-              <div className="flex -space-x-3">
-                {avatars.map(({ initials, bg }) => (
-                  <div
-                    key={initials}
-                    className="w-9 h-9 rounded-full border-2 border-background flex items-center justify-center text-white text-[10px] font-bold select-none"
-                    style={{ backgroundColor: bg }}
-                  >
-                    {initials}
-                  </div>
-                ))}
-              </div>
-              <p className="text-sm text-foreground/60">
-                Trusted by{" "}
-                <span className="font-bold text-foreground">500+</span>{" "}
-                developers building the future.
-              </p>
+              <CustomButton
+                variant="white"
+                text="Get the Kit"
+                href="https://github.com/mashdotdev/saas-starter-kit"
+              />
+              <CustomButton
+                variant="orange"
+                text="Star on Github"
+                href="https://github.com/mashdotdev/saas-starter-kit"
+              />
             </div>
           </div>
           {/* Video Div */}
