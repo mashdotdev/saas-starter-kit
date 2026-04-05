@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 from middleware.auth import verify_internal_secret
 from services.metering import record_usage
+from services import rag
 
 router = APIRouter()
 client = AsyncOpenAI(
@@ -30,14 +31,76 @@ class ChatRequest(BaseModel):
     orgId: str = ""
 
 
+async def build_messages(req: ChatRequest) -> list[dict]:
+    messages = [{"role": m.role, "content": m.content} for m in req.messages]
+
+    print(f"[RAG] orgId='{req.orgId}'")
+
+    if not req.orgId:
+        print("[RAG] no orgId — skipping retrieval")
+        return messages
+
+    user_messages = [m for m in req.messages if m.role == "user"]
+    if not user_messages:
+        return messages
+
+    query = user_messages[-1].content
+    print(f"[RAG] query='{query}'")
+
+    try:
+        results = await rag.retrieve(req.orgId, query, k=5)
+        print(f"[RAG] retrieved {len(results)} chunks")
+    except Exception as e:
+        print(f"[RAG] error retrieving: {e}")
+        return messages
+
+    if not results:
+        print("[RAG] no results — check orgId matches the one used during upload")
+        return messages
+
+    for i, r in enumerate(results):
+        print(
+            f"[RAG] chunk {i}: score={r['score']:.3f} file={r['metadata'].get('filename')}"
+        )
+
+    context = "\n\n---\n\n".join(
+        f"Source: {r['metadata'].get('filename', 'unknown')}\n{r['content']}"
+        for r in results
+    )
+
+    # Check for existing system message
+    existing_system = next((m for m in messages if m["role"] == "system"), None)
+    if existing_system:
+        existing_system["content"] += (
+            "\n\nYou are a helpful assistant. Use the following context from the "
+            "organisation's knowledge base to answer the user's question. "
+            "If the answer is not in the context, say so — do not make things up.\n\n"
+            f"Context:\n{context}"
+        )
+    else:
+        system_message = {
+            "role": "system",
+            "content": (
+                "You are a helpful assistant. Use the following context from the "
+                "organisation's knowledge base to answer the user's question. "
+                "If the answer is not in the context, say so — do not make things up.\n\n"
+                f"Context:\n{context}"
+            ),
+        }
+        messages = [system_message] + messages
+    return messages
+
+
 async def stream_tokens(req: ChatRequest) -> AsyncGenerator[str, None]:
     input_tokens = 0
     output_tokens = 0
 
     try:
+        messages = await build_messages(req)
+
         stream = await client.chat.completions.create(
             model=MODEL,
-            messages=[{"role": m.role, "content": m.content} for m in req.messages],
+            messages=messages,
             stream=True,
             stream_options={"include_usage": True},
         )

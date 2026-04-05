@@ -1,15 +1,15 @@
 import os
 from typing import Any
 
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointIdsList
 from qdrant_client.models import Filter, FieldCondition, MatchValue
 
-EMBEDDING_MODEL = "models/text-embedding-004"
-VECTOR_SIZE = 768  # text-embedding-004 output dimension
+EMBEDDING_MODEL = "gemini-embedding-001"
+VECTOR_SIZE = 768
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
 
@@ -29,6 +29,7 @@ def _get_embeddings() -> GoogleGenerativeAIEmbeddings:
     return GoogleGenerativeAIEmbeddings(
         model=EMBEDDING_MODEL,
         google_api_key=os.getenv("GEMINI_API_KEY"),
+        output_dimensionality=VECTOR_SIZE,
     )
 
 
@@ -41,12 +42,15 @@ def _ensure_collection(client: QdrantClient, collection_name: str) -> None:
         )
 
 
-async def ingest(org_id: str, doc_id: str, content: str, filename: str, is_pdf: bool = False) -> int:
+async def ingest(
+    org_id: str, doc_id: str, content: str, filename: str, is_pdf: bool = False
+) -> int:
     """Split, embed, and upsert document chunks. Returns chunk count."""
     if is_pdf:
         import base64
         import io
         from pypdf import PdfReader
+
         pdf_bytes = base64.b64decode(content)
         reader = PdfReader(io.BytesIO(pdf_bytes))
         content = "\n".join(page.extract_text() or "" for page in reader.pages)
