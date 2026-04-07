@@ -9,6 +9,7 @@ import OrgSwitcher from "@/components/dashboard/org-switcher";
 const navItems = [
   { href: "/dashboard", label: "Overview" },
   { href: "/dashboard/ai", label: "AI Chat" },
+  { href: "/dashboard/knowledge-base", label: "Knowledge Base" },
   { href: "/dashboard/billing", label: "Billing" },
   { href: "/dashboard/settings/members", label: "Members" },
   { href: "/dashboard/settings", label: "Settings" },
