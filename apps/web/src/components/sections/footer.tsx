@@ -41,9 +41,12 @@ const Footer = () => {
         <div>
           <h3 className="font-subheading text-xl">Community</h3>
           <ul className="mt-4 text-zinc-400 space-y-4">
-            {["Github", "Discord"].map((item) => (
-              <li key={item}>{item}</li>
-            ))}
+            <Link
+              target="_blank"
+              href={"https://github.com/mashdotdev/saas-starter-kit"}
+            >
+              Github
+            </Link>
           </ul>
         </div>
       </div>
