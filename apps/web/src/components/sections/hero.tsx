@@ -120,8 +120,8 @@ const Hero = () => {
             <div className="flex flex-wrap gap-4 mt-6">
               <CustomButton
                 variant="white"
-                text="Get the Kit"
-                href="https://github.com/mashdotdev/saas-starter-kit"
+                text="Dashboard"
+                href="/dashboard"
               />
               <CustomButton
                 variant="orange"
